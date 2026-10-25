@@ -32,7 +32,7 @@ flowchart TD
         TursoCloud[("Turso Cloud libSQL<br/>(Optional Remote DB)")]
     end
 
-    Visitor -->|"GET /api/{health,availability,services,packages,payments/methods}<br/>POST /api/bookings"| Traefik
+    Visitor -->|"GET /api/{health,availability,services}<br/>POST /api/bookings (with CORS OPTIONS)"| Traefik
     Operator -->|"Browser HTTPS"| Traefik
 
     Traefik -->|"Check Session & Role Headers"| Authelia
@@ -114,7 +114,7 @@ sequenceDiagram
 ### Traefik Routers Specification
 
 1. **`armonia-api-public` (Priority 30, Public)**:
-   - **Rule**: `Host(SERVICE_DOMAIN) && (PathPrefix('/api/health') || PathPrefix('/api/availability') || PathPrefix('/api/services') || PathPrefix('/api/packages') || PathPrefix('/api/payments/methods') || (Method('POST') && PathPrefix('/api/bookings')))`
+   - **Rule**: `Host(SERVICE_DOMAIN) && (PathPrefix('/api/health') || PathPrefix('/api/availability') || (Method('GET', 'HEAD', 'OPTIONS') && PathPrefix('/api/services')) || (Method('POST', 'OPTIONS') && PathPrefix('/api/bookings')))`
    - **Middleware**: `armonia-api-strip@docker` (strips `/api`).
    - **Target**: `armonia-api:8000`.
    - **Authentication**: None (Bypasses Authelia).

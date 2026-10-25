@@ -33,7 +33,7 @@ services:
       - "traefik.http.middlewares.armonia-api-strip.stripprefix.prefixes=/api"
 
       # 1. Public API & Health Router (Priority 30 — bypasses Authelia forward-auth)
-      - "traefik.http.routers.armonia-api-public.rule=Host(`${SERVICE_DOMAIN:-armonia.roadtotech.me}`) && (PathPrefix(`/api/health`) || PathPrefix(`/api/availability`) || PathPrefix(`/api/services`) || PathPrefix(`/api/packages`) || PathPrefix(`/api/payments/methods`) || (Method(`POST`) && PathPrefix(`/api/bookings`)))"
+      - "traefik.http.routers.armonia-api-public.rule=Host(`${SERVICE_DOMAIN:-armonia.roadtotech.me}`) && (PathPrefix(`/api/health`) || PathPrefix(`/api/availability`) || (Method(`GET`, `HEAD`, `OPTIONS`) && PathPrefix(`/api/services`)) || (Method(`POST`, `OPTIONS`) && PathPrefix(`/api/bookings`)))"
       - "traefik.http.routers.armonia-api-public.entrypoints=websecure"
       - "traefik.http.routers.armonia-api-public.tls=true"
       - "traefik.http.routers.armonia-api-public.priority=30"

@@ -20,9 +20,9 @@ In the platform's multi-environment topology, this deployment serves as the **au
 
 | Route Pattern | Method | Target Service | Access Level | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `/api/health`, `/api/availability`, `/api/services`, `/api/packages`, `/api/payments/methods` | `GET` | `armonia-api:8000` | **Public** | Public service catalog, business hours, and payment instructions. |
-| `/api/bookings` | `POST` | `armonia-api:8000` | **Public** | Client self-service appointment reservation intake. |
-| `/api/*` | `ANY` | `armonia-api:8000` | **Protected** (Authelia) | Administrative operations: 48h follow-up queue, client CRM, booking lifecycle, and session notes. |
+| `/api/health`, `/api/availability`, `/api/services` | `GET`, `OPTIONS` | `armonia-api:8000` | **Public** | Public service catalog and real-time appointment availability. |
+| `/api/bookings` | `POST`, `OPTIONS` | `armonia-api:8000` | **Public** | Client self-service appointment reservation intake with CORS preflight support. |
+| `/api/*` | `ANY` | `armonia-api:8000` | **Protected** (Authelia) | Administrative operations: 48h follow-up queue, client CRM, booking lifecycle, therapy packages, and session notes. |
 | `/*` | `GET` | `armonia-dashboard:80` | **Protected** (Authelia) | Mobile-first administrative Vite SPA served via Nginx. |
 
 > Detailed routing diagrams, middleware execution order, and security boundaries are documented in [**`ARCHITECTURE.md`**](./ARCHITECTURE.md).

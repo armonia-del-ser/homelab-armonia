@@ -16,7 +16,7 @@ Chosen option: **Containerized Homelab Sites orchestration using Traefik dual-pr
 
 Specifically:
 1. **Traefik Dual-Router Architecture**:
-   - Router 1 (`Priority 30`): Whitelists public intake endpoints (`/api/health`, `/api/availability`, `/api/services`, `/api/packages`, `/api/payments/methods`, and `POST /api/bookings`) with prefix stripping (`/api`), bypassing Authelia authentication.
+   - Router 1 (`Priority 30`): Whitelists public intake endpoints (`/api/health`, `/api/availability`, safe read methods for `/api/services`, and `POST /api/bookings` with CORS preflight `OPTIONS`) with prefix stripping (`/api`), bypassing Authelia authentication. Sensitive operations (`/api/packages`, `POST /api/services`, administrative booking and CRM actions) fall through to Router 2.
    - Router 2 (`Priority 20`): Protects administrative `/api` endpoints, enforcing Authelia ForwardAuth and forwarding authenticated identity headers (`Remote-Email`, `Remote-Groups`, `Remote-Name`, `Remote-User`).
    - Router 3 (`Priority 10`): Serves the dashboard Vite SPA behind Authelia ForwardAuth.
 2. **Decoupled Identity via `AUTH_PROVIDER=proxy_headers`**:
